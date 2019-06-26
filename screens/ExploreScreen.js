@@ -1,14 +1,37 @@
 import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import { StyleSheet,
+         View,
+         ScrollView,} from 'react-native';
+import { QuestionPost } from '../components/QuestionPost';
 
 export default class ExploreScreen extends React.Component {
   static navigationOptions = {
-    title: 'app.json',
+    title: 'Explore',
   };
 
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
-    return <ExpoConfigView />;
+    return (
+      <ScrollView>
+        <QuestionPost
+          username="Sherlock"
+          content="Del Taco makes great fries."
+          img={false}
+          >
+        </QuestionPost>
+        <QuestionPost
+          username="Octocat"
+          content="How does this outfit look on me?"
+          img={true}
+          uri="https://octodex.github.com/images/pusheencat.png">
+        </QuestionPost>
+      </ScrollView>
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
