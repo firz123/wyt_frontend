@@ -7,6 +7,9 @@ import {
   Text,
   TouchableOpacity,
   View,
+  TextInput,
+  TouchableHighlight,
+  FlatList,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
@@ -17,85 +20,70 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
+  constructor() {
+      super();
+  }
+
+  renderBullet(data) {
+     return (
+       <View style={{flexDirection: 'row'}}>
+       <Text>{`\u2022`}</Text>
+       <Text>{data}</Text>
+       </View>
+     );
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
+          <View style={styles.imageTagContainer}>
             <Image
               source={
                 __DEV__
                   ? require('../assets/images/robot-dev.png')
                   : require('../assets/images/robot-prod.png')
               }
-              style={styles.welcomeImage}
+              style={styles.profileImage}
             />
+
+            <TouchableHighlight
+              style={styles.tagSection}
+            ><Text style={styles.submitText}>Post Tags</Text></TouchableHighlight>
           </View>
 
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
+          <View style={styles.postContainer}>
+            <TextInput
+            style={styles.postStyle}
+            placeholder="What's up for discussion..."
+            placeholderTextColor="#bfc4cc"
+            multiline={true}
+            numberOfLines = {6}>
+            </TextInput>
+          </View>
 
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
+          <View style={styles.votingOptions}>
+              <Text>voting options go here</Text>
+          </View>
+          <View style={styles.rightAlign}>
+            <View style={styles.postButton}>
+                  <Text style={styles.postButtonText}>Post</Text>
             </View>
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
           </View>
 
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
+          <FlatList
+            style={{marginLeft: 20, marginRight: 10}}
+            data={[{key: 'All users can comment'},
+                   {key: 'All users can view'},
+                   {key: 'Users must vote before seeing the voting results'}
+                 ]}
+            renderItem={({item}) => this.renderBullet(item.key)}
+          />
+
         </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
       </View>
     );
   }
-
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
-
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
-    }
-  }
-
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
-
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
 }
 
 const styles = StyleSheet.create({
@@ -103,86 +91,76 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
   contentContainer: {
     paddingTop: 30,
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+  rightAlign: {
+    alignItems: 'flex-end',
   },
-  welcomeImage: {
+  votingOptions: {
+    borderTopColor: '#ccced1',
+    borderTopWidth: 1,
+    borderBottomColor: '#ccced1',
+    borderBottomWidth: 1,
+    marginBottom: 10,
+    padding: 10,
+  },
+  postStyle: {
+    height: 220,
+    fontSize: 20,
+  },
+  postContainer: {
+    alignItems: 'flex-start',
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  postButton: {
+    marginTop:1,
+    paddingTop:10,
+    paddingBottom:10,
+    borderRadius:5,
+    backgroundColor: '#de6df2',
     width: 100,
-    height: 80,
+    height: 50,
+    marginRight: 20,
+  },
+  postButtonText: {
+    color: '#fff',
+    fontSize: 20,
+    textAlign:'center',
+  },
+  imageTagContainer: {
+    borderTopColor: '#ccced1',
+    borderTopWidth: 1,
+    alignItems: 'flex-start',
+    marginTop: 10,
+    marginBottom: 15,
+    paddingLeft: 20,
+    paddingRight: 20,
+    flexDirection: 'row',
+  },
+  tagSection: {
+    marginLeft:10,
+    marginTop:10,
+    paddingTop:5,
+    paddingBottom:5,
+    paddingLeft:8,
+    borderRadius:15,
+    borderWidth: 1,
+    borderColor: '#de6df2',
+    width: 250,
+    height: 28,
+  },
+  submitText:{
+      fontSize: 12,
+      color:'#de6df2',
+      textAlign:'left',
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius:15,
     resizeMode: 'contain',
     marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
   },
 });
