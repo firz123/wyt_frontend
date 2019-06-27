@@ -16,13 +16,14 @@ export default class ExploreScreen extends React.Component {
           username="Sherlock"
           content="Del Taco makes great fries."
           img={false}
-          >
+          votingOpts={['👍', '👎']} >
         </QuestionPost>
         <QuestionPost
           username="Octocat"
           content="How does this outfit look on me?"
           img={true}
-          uri="https://octodex.github.com/images/pusheencat.png">
+          uri="https://octodex.github.com/images/pusheencat.png"
+          votingOpts={['👍', '👎']} >
         </QuestionPost>
       </ScrollView>
     );
