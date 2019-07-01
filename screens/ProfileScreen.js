@@ -1,14 +1,33 @@
 import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import {
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+  TouchableHighlight,
+  FlatList,
+} from 'react-native';
+import { ProfileIntro } from '../components/ProfileIntro';
 
 export default class ProfileScreen extends React.Component {
   static navigationOptions = {
-    title: 'app.json',
+    title: 'Profile',
   };
 
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
-    return <ExpoConfigView />;
+    return <ScrollView>
+      <ProfileIntro
+        username="Octocat"
+        tag="octocat"
+        bio="Hello this is a bio. This is the kind of person I am and what I like to think about."
+        img={true}
+        uri="https://octodex.github.com/images/pusheencat.png">
+      </ProfileIntro>
+
+    </ScrollView>;
   }
 }
