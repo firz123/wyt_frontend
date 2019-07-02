@@ -1,5 +1,3 @@
-import { combineReducers } from 'redux';
-
 const INITIAL_STATE = {
   username: 'Octocat',
   tag: 'octocat',
