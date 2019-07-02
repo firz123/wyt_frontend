@@ -29,8 +29,8 @@ class ProfileScreen extends React.Component {
       </View>
       <ActivityFeedItem
         username="Octocat"
-        action="POST"
-        poll="How does this outfit look on me?"
+        action={this.props.activity.action}
+        poll={this.props.activity.poll}
         profileImg="https://octodex.github.com/images/pusheencat.png"
         >
       </ActivityFeedItem>
