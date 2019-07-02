@@ -8,8 +8,9 @@ import {
 } from 'react-native';
 import { ProfileIntro } from '../components/ProfileIntro';
 import { ActivityFeedItem } from '../components/ActivityFeedItem';
+import { connect } from 'react-redux';
 
-export default class ProfileScreen extends React.Component {
+class ProfileScreen extends React.Component {
   static navigationOptions = {
     title: 'Profile',
   };
@@ -49,3 +50,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+const mapStateToProps = (state) => {
+  const { activity } = state
+  return { activity }
+};
+
+export default connect(mapStateToProps)(ProfileScreen);
