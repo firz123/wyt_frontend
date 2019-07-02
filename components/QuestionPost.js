@@ -19,12 +19,15 @@ export class QuestionPost extends React.Component {
   render() {
     return (
     <View style={styles.mainContainer}>
-      <View style={styles.imageTagContainer}>
+      <View style={styles.profImgContainer}>
         <Image
           source={require('../assets/images/robot-dev.png') }
           style={styles.profileImage}
         />
-        <Text>{this.props.username}</Text>
+        <View style={styles.usernameTagContainer}>
+          <Text>{this.props.username}</Text>
+          <Text style={styles.tagStyle}>{this.props.tag}</Text>
+        </View>
       </View>
       <View style={styles.subContainer}>
         <Text>{this.props.content}</Text>
@@ -53,13 +56,17 @@ const styles = StyleSheet.create({
   subContainer: {
     marginLeft: 30,
   },
-  imageTagContainer: {
+  profImgContainer: {
     alignItems: 'flex-start',
     marginTop: 10,
     marginBottom: 15,
     paddingLeft: 20,
     paddingRight: 20,
     flexDirection: 'row',
+  },
+  usernameTagContainer: {
+    alignItems: 'flex-start',
+    flexDirection: 'column',
   },
   profileImage: {
     width: 50,
@@ -91,5 +98,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccced1',
     borderRadius: 12,
+  },
+  tagStyle: {
+    color: "#999",
+    fontSize: 12,
+    margin: 2,
   },
 });

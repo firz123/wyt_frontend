@@ -1,17 +1,13 @@
 import React from 'react';
 import {
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
-  TextInput,
-  TouchableHighlight,
-  FlatList,
 } from 'react-native';
 import { ProfileIntro } from '../components/ProfileIntro';
+import { ActivityFeedItem } from '../components/ActivityFeedItem';
 
 export default class ProfileScreen extends React.Component {
   static navigationOptions = {
@@ -27,7 +23,29 @@ export default class ProfileScreen extends React.Component {
         img={true}
         uri="https://octodex.github.com/images/pusheencat.png">
       </ProfileIntro>
-
+      <View style={styles.titleStyle}>
+        <Text style={styles.boldFont}>Activity Feed</Text>
+      </View>
+      <ActivityFeedItem
+        username="Octocat"
+        action="POST"
+        poll="How does this outfit look on me?"
+        profileImg="https://octodex.github.com/images/pusheencat.png"
+        >
+      </ActivityFeedItem>
     </ScrollView>;
   }
 }
+
+const styles = StyleSheet.create({
+  titleStyle: {
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccced1',
+    padding: 5,
+  },
+  boldFont: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+});
