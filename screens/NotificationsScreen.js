@@ -3,29 +3,34 @@ import { StyleSheet,
          View,
          ScrollView,} from 'react-native';
 import { NotificationPost } from '../components/NotificationPost';
+import { ActivityFeedItem } from '../components/ActivityFeedItem';
+import { connect } from 'react-redux';
 
-export default class NotificationsScreen extends React.Component {
+class NotificationsScreen extends React.Component {
   static navigationOptions = {
     title: 'Notifications',
   };
 
+  makeNotifications(notifArr) {
+    const notificationFeed = notifArr.map((notif) =>
+        <ActivityFeedItem
+          username={notif.username}
+          action={notif.action}
+          poll={notif.preview}
+          voteOption={notif.voteOption ? notif.voteOption : null}
+          profileImg={notif.uri}
+          key={notif.pollID}
+          />
+      )
+      return (
+        <ScrollView>
+            { notificationFeed }
+        </ScrollView>
+      );
+  }
+
   render() {
-    return (
-      <ScrollView>
-        <NotificationPost
-          username="Sherlock"
-          content="Del Taco makes great fries."
-          profileImg="https://octodex.github.com/images/pusheencat.png"
-          >
-        </NotificationPost>
-        <NotificationPost
-          username="Octocat"
-          content="How does this outfit look on me? I think its good"
-          profileImg="https://octodex.github.com/images/pusheencat.png"
-          >
-        </NotificationPost>
-      </ScrollView>
-    );
+    return this.makeNotifications(this.props.notifications.activityList);
   }
 }
 
@@ -35,3 +40,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
+
+const mapStateToProps = (state) => {
+  const { notifications } = state
+  return { notifications }
+};
+
+export default connect(mapStateToProps)(NotificationsScreen);

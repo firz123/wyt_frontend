@@ -3,32 +3,33 @@ import { StyleSheet,
          View,
          ScrollView,} from 'react-native';
 import { QuestionPost } from '../components/QuestionPost';
+import { connect } from 'react-redux';
 
-export default class ExploreScreen extends React.Component {
+class ExploreScreen extends React.Component {
   static navigationOptions = {
     title: 'Explore',
   };
 
-  render() {
+  makeQuestionPolls(pollArr) {
+    const pollFeed = pollArr.map((poll) =>
+      <QuestionPost
+        username={poll.username}
+        tag={poll.tag}
+        content={poll.content}
+        img={poll.img}
+        uri={poll.uri ? poll.uri : null}
+        votingOpts={poll.votingOpts}
+        key={poll.pollID} />
+    )
     return (
       <ScrollView>
-        <QuestionPost
-          username="Sherlock"
-          tag="@sherlock"
-          content="Del Taco makes great fries."
-          img={false}
-          votingOpts={['👍', '👎']} >
-        </QuestionPost>
-        <QuestionPost
-          username="Octocat"
-          tag="@octocat"
-          content="How does this outfit look on me?"
-          img={true}
-          uri="https://octodex.github.com/images/pusheencat.png"
-          votingOpts={['👍', '👎']} >
-        </QuestionPost>
+          { pollFeed }
       </ScrollView>
     );
+  }
+
+  render() {
+    return this.makeQuestionPolls(this.props.polls.pollList);
   }
 }
 
@@ -38,3 +39,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
+
+
+const mapStateToProps = (state) => {
+  const { polls } = state
+  return { polls }
+};
+
+export default connect(mapStateToProps)(ExploreScreen);

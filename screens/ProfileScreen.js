@@ -15,25 +15,32 @@ class ProfileScreen extends React.Component {
     title: 'Profile',
   };
 
+  makeActivityFeed(activityItem) {
+    const activityFeed = activityItem.activities.map((act) =>
+      <ActivityFeedItem
+        username={activityItem.username}
+        action={act.action}
+        poll={act.poll}
+        voteOption={act.voteOption ? act.voteOption : null}
+        profileImg={activityItem.uri}
+        key={act.pollID}
+      />
+    )
+    return activityFeed;
+
+  }
   render() {
     return <ScrollView>
       <ProfileIntro
-        username="Octocat"
-        tag="octocat"
-        bio="Hello this is a bio. This is the kind of person I am and what I like to think about."
+        username={this.props.activity.username}
+        tag={this.props.activity.tag}
+        bio={this.props.activity.bio}
         img={true}
-        uri="https://octodex.github.com/images/pusheencat.png">
-      </ProfileIntro>
+        uri={this.props.activity.uri}/>
       <View style={styles.titleStyle}>
         <Text style={styles.boldFont}>Activity Feed</Text>
       </View>
-      <ActivityFeedItem
-        username="Octocat"
-        action={this.props.activity.action}
-        poll={this.props.activity.poll}
-        profileImg="https://octodex.github.com/images/pusheencat.png"
-        >
-      </ActivityFeedItem>
+      { this.makeActivityFeed(this.props.activity) }
     </ScrollView>;
   }
 }

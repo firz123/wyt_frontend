@@ -4,10 +4,10 @@ import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import userActivityReducer from './UserActivityReducer';
+import rootReducer from './reducers/RootReducer';
 
 
-const store = createStore(userActivityReducer);
+const store = createStore(rootReducer);
 
 export default class App extends React.Component {
   state = {

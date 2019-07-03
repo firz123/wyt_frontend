@@ -8,13 +8,16 @@ import { Text } from 'react-native';
 
 export class QuestionPost extends React.Component {
   makeVoteOption(optionArr) {
-    items = []
-    for (var i = 0; i < optionArr.length; i++) {
-      items.push(<TouchableHighlight key={i}>
-                    <Text style={styles.emojiOption}>{`${optionArr[i]}`}</Text>
-                 </TouchableHighlight>)
-    }
-    return items;
+    const voteEmojis = optionArr.map((option, index) =>
+        <TouchableHighlight key={index}>
+            <Text style={styles.emojiOption}>{option}</Text>
+        </TouchableHighlight>
+    )
+    return (
+      <View style={styles.votingOptions}>
+           {voteEmojis}
+      </View>
+    );
   }
   render() {
     return (
@@ -26,7 +29,7 @@ export class QuestionPost extends React.Component {
         />
         <View style={styles.usernameTagContainer}>
           <Text>{this.props.username}</Text>
-          <Text style={styles.tagStyle}>{this.props.tag}</Text>
+          <Text style={styles.tagStyle}>{`@${this.props.tag}`}</Text>
         </View>
       </View>
       <View style={styles.subContainer}>
@@ -36,9 +39,7 @@ export class QuestionPost extends React.Component {
           <Image source={{uri: this.props.uri}}
           style={styles.postImage}/> : <View></View>
         }
-        <View style={styles.votingOptions}>
-             {this.makeVoteOption(this.props.votingOpts)}
-        </View>
+        {this.makeVoteOption(this.props.votingOpts)}
       </View>
     </View> );
   }

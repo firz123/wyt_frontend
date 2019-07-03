@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,16 +9,21 @@ import {
   TextInput,
   TouchableHighlight,
   FlatList,
+  Animated,
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import { connect } from 'react-redux';
+import EmojiSelector, { Categories }  from 'react-native-emoji-selector';
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
-  constructor() {
-      super();
+  constructor(props) {
+    super(props);
+    this.state = {pickerVisible: false,
+                  selectedVoteOpts: [],
+                  pollText: ''};
   }
 
   renderBullet(data) {
@@ -31,23 +35,66 @@ export default class HomeScreen extends React.Component {
      );
   }
 
+  wrapVoteBox(voteOpts) {
+    const results = voteOpts.map((emoji) =>
+        <TouchableOpacity
+            style={styles.emojiOption}
+            onPress={this.removeOption(emoji)}
+            key={emoji.codePointAt(0)}>
+          <Text style={styles.defaultOption}>{emoji}</Text>
+        </TouchableOpacity>)
+    return results;
+  }
+
+  emojiSelected = (emoji) => {
+    if (this.state.selectedVoteOpts.includes(emoji)) {
+      this.setState((state, props) => {
+        return {pickerVisible: false}
+      });
+    } else {
+    this.setState((state, props) => {
+      return {pickerVisible: false,
+              selectedVoteOpts: this.state.selectedVoteOpts.concat(emoji)};
+    });
+    }
+  }
+
+  removeOption = (emoji) => {
+    return () => {
+      this.setState((state, props) => {
+        return {pickerVisible: false,
+                selectedVoteOpts: state.selectedVoteOpts.filter(
+                  function(value, index, arr){
+                    return value != emoji;}),
+                };
+      });
+    }
+  }
+
+  togglePicker = () => {
+    this.setState((state, props) => {
+      return {pickerVisible: !state.pickerVisible};
+    });
+  }
+  pickerOff = () => {
+    this.setState({pickerVisible: false});
+  }
+  pickerOn = () => {
+    this.setState({pickerVisible: true});
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.imageTagContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
+            <Image source={{uri: this.props.activity.uri}}
               style={styles.profileImage}
             />
 
-            <TouchableHighlight
-              style={styles.tagSection}
-            ><Text style={styles.submitText}>Post Tags</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.tagSection}>
+              <Text style={styles.submitText}>Post Tags</Text>
+            </TouchableHighlight>
           </View>
 
           <View style={styles.postContainer}>
@@ -56,16 +103,43 @@ export default class HomeScreen extends React.Component {
             placeholder="What's up for discussion..."
             placeholderTextColor="#bfc4cc"
             multiline={true}
+            maxLength={300}
+            onChangeText={(text) => this.setState({pollText: text})}
             numberOfLines = {6}>
             </TextInput>
+            <View style={styles.row}>
+              <View style={styles.rightAlign}>
+                <Text style={styles.greyText}>{`${300 - this.state.pollText.length} characters left`}</Text>
+              </View>
+            </View>
           </View>
 
           <View style={styles.votingOptions}>
-              <Text>voting options go here</Text>
+          {
+            this.state.selectedVoteOpts.length ?
+            this.wrapVoteBox(this.state.selectedVoteOpts) :
+            null
+          }
+            <TouchableOpacity style={styles.emojiOption} onPress={this.togglePicker}>
+              <Text style={[styles.defaultOption, styles.greyText]}>+</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.rightAlign}>
-            <View style={styles.postButton}>
+          {
+            this.state.pickerVisible ? <EmojiSelector
+              showTabs={true}
+              showSearchBar={true}
+              category={Categories.people}
+              onEmojiSelected={ this.emojiSelected
+              }
+              columns={8}
+            /> : null
+          }
+
+          <View style={styles.row}>
+            <View style={styles.rightAlign}>
+              <TouchableOpacity style={styles.postButton}>
                   <Text style={styles.postButtonText}>Post</Text>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -92,8 +166,18 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingTop: 30,
   },
-  rightAlign: {
+  row: {
+    flexDirection: 'row',
     alignItems: 'flex-end',
+  },
+  leftAlign: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  rightAlign: {
+    flex: 1,
+    alignItems: 'flex-end',
+    paddingBottom: 5,
   },
   votingOptions: {
     borderTopColor: '#ccced1',
@@ -102,6 +186,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginBottom: 10,
     padding: 10,
+    flexDirection: 'row',
   },
   postStyle: {
     height: 220,
@@ -161,4 +246,30 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginTop: 3,
   },
+  emojiOption: {
+    height: 30,
+    width: 40,
+    paddingLeft: 5,
+    paddingRight: 5,
+    flexDirection: 'column',
+    marginRight: 5,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccced1',
+    borderRadius: 12,
+  },
+  greyText: {
+    color: '#bfc4cc',
+  },
+  defaultOption: {
+    fontSize: 20,
+  },
 });
+
+const mapStateToProps = (state) => {
+  const { activity } = state
+  const { polls } = state
+  return { activity, polls }
+};
+
+export default connect(mapStateToProps)(HomeScreen);
