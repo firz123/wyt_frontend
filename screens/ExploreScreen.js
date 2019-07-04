@@ -1,18 +1,33 @@
 import React from 'react';
-import { StyleSheet,
-         View,
-         ScrollView,} from 'react-native';
+import { ScrollView,} from 'react-native';
 import { QuestionPost } from '../components/QuestionPost';
 import { connect } from 'react-redux';
-import { votePoll } from '../actions/actions';
+import { votePoll, grabPostsFromAPI } from '../actions/actions';
 
+/**
+ * Main screen where polls from other users are loaded and the user can
+ * vote on them. Also new polls from the user will appear here.
+ *
+ * TODO: Reverse the order of the polls so most recent are first
+ */
 class ExploreScreen extends React.Component {
   static navigationOptions = {
     title: 'Explore',
   };
 
+  /**
+  * Uncomment this to use the API instead of the dummy data.
+  */
+  //componentDidMount() {
+  //  this.props.grabPostsFromAPI();
+  //}
+
+  /**
+  * Callback called by QuestionPosts to dispatch to Redux after a user votes on
+  * a question.
+  */
   voteCallback = (pollID, preview, option, inc_dec) => {
-    this.props.votePoll(this.props.activity.voterID, pollID, preview, option, inc_dec)
+    this.props.votePoll(this.props.activity.userID, pollID, preview, option, inc_dec)
   }
 
   makeQuestionPolls(pollArr) {
@@ -42,23 +57,18 @@ class ExploreScreen extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
-
-
 const mapStateToProps = (state) => {
   const { activity } = state
   const { polls } = state
   return { activity, polls }
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = dispatch => {
+  return {
   votePoll: (voterID, globalPollID, preview, voteOption, inc_dec) =>
-            dispatch(votePoll(voterID, globalPollID, preview, voteOption, inc_dec))
-})
+            dispatch(votePoll(voterID, globalPollID, preview, voteOption, inc_dec)),
+  grabPostsFromAPI: () => dispatch(grabPostsFromAPI())
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExploreScreen);

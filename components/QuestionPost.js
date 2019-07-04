@@ -6,12 +6,19 @@ import { View,
        } from 'react-native';
 import { Text } from 'react-native';
 
+/**
+ * These are the vote buttons on the QuestionPost with emojis.
+ */
 class ToggleButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {selected: false}
   }
 
+  /**
+  * When the button is pressed, the vote option and whether the count should be
+  * increased or decreased is sent to the QuestionPost related to this button
+  */
   toggleButton = () => {
     this.props.toggleCallback(this.props.option, this.state.selected ? -1 : 1);
     this.setState((state, props) => {
@@ -36,7 +43,18 @@ class ToggleButton extends React.Component {
   }
 }
 
+
+/**
+* The component containing a poll and the voting options,
+* allowing the user to vote on it.
+*/
 export class QuestionPost extends React.Component {
+
+  /**
+  * When a vote button is pressed, it calls this callback which calls the final
+  * callback on the Explore Screen, passing in the pollID, content, voteOption, and
+  * increment/decrement amount
+  */
   voted = (option, inc_dec) => {
     this.props.voteCallback(this.props.pollID, this.props.content, option, inc_dec)
   }

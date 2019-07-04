@@ -3,11 +3,17 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers/RootReducer';
+import axios from 'axios';
+import axiosMiddleware from 'redux-axios-middleware';
 
+const client = axios.create({
+  baseURL: 'https://jsonplaceholder.typicode.com',
+  responseType: 'json'
+});
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(axiosMiddleware(client)));
 
 export default class App extends React.Component {
   state = {

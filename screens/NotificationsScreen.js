@@ -6,6 +6,10 @@ import { NotificationPost } from '../components/NotificationPost';
 import { ActivityFeedItem } from '../components/ActivityFeedItem';
 import { connect } from 'react-redux';
 
+/**
+* A list of notifications that the user has received about their friends.
+* TODO: Make a user able to delete these.
+*/
 class NotificationsScreen extends React.Component {
   static navigationOptions = {
     title: 'Notifications',

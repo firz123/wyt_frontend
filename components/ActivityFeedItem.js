@@ -5,7 +5,12 @@ import { View,
        } from 'react-native';
 import { Text } from 'react-native';
 
-
+/**
+* These show up both on the NotificationScreen and the ProfileScreen and contain
+* a user's action, detail about what they did, and what the associated poll was.
+* They will not be displayed if props.active is false or undefined, so make sure
+* to include props.active on an ActivityFeedItem. 
+*/
 export class ActivityFeedItem extends React.Component {
   render() {
     if (!this.props.active) {

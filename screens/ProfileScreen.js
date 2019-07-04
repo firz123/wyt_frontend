@@ -10,6 +10,11 @@ import { ProfileIntro } from '../components/ProfileIntro';
 import { ActivityFeedItem } from '../components/ActivityFeedItem';
 import { connect } from 'react-redux';
 
+/**
+* Contains the user's username, tag, bio , profile image, and activity feed,
+* which is a list of their votes, polls, and comments.
+* TODO: Users should be able to change their username, tag, bio, and picture.
+*/
 class ProfileScreen extends React.Component {
   static navigationOptions = {
     title: 'Profile',

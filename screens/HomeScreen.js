@@ -15,6 +15,11 @@ import { connect } from 'react-redux';
 import EmojiSelector, { Categories }  from 'react-native-emoji-selector';
 import { addPoll } from '../actions/actions';
 
+/**
+* Lets the user make a new post.
+* TODO: Users should be able to add an image to their post, add tags,
+* change visibility rules.
+*/
 class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
@@ -27,6 +32,9 @@ class HomeScreen extends React.Component {
                   pollText: ''};
   }
 
+  /**
+  * Function used to render bulleted items at the bottom of the screen.
+  */
   renderBullet(data) {
      return (
        <View style={{flexDirection: 'row'}}>
@@ -36,6 +44,11 @@ class HomeScreen extends React.Component {
      );
   }
 
+  /**
+  * Function used to create the voting options (emojis) after they've been
+  * selected from the emoji picker. Puts them in a TouchableOpacity so they can
+  * be deleted.
+  */
   wrapVoteBox(voteOpts) {
     const results = voteOpts.map((emoji) =>
         <TouchableOpacity
@@ -47,6 +60,10 @@ class HomeScreen extends React.Component {
     return results;
   }
 
+  /**
+  * Callback used by the emoji picker when an emoji has been selected,
+  * adds it to an array in the state.
+  */
   emojiSelected = (emoji) => {
     if (this.state.selectedVoteOpts.includes(emoji)) {
       this.setState((state, props) => {
@@ -60,6 +77,10 @@ class HomeScreen extends React.Component {
     }
   }
 
+  /**
+  * Callback used by the voting option when it's selected, which deletes it
+  * from the array in the state, so it gets removed from the menu.
+  */
   removeOption = (emoji) => {
     return () => {
       this.setState((state, props) => {
@@ -72,6 +93,11 @@ class HomeScreen extends React.Component {
     }
   }
 
+  /**
+  * Callback used by the post button that verifies that the user has selected
+  * voting options and has written a post, then dispatches it to the Redux store
+  * and refreshes the HomeScreen.
+  */
   verifyAndDispatch = () => {
     if (this.state.selectedVoteOpts.length == 0 &&
         this.state.pollText.length == 0) {
@@ -88,6 +114,10 @@ class HomeScreen extends React.Component {
                   pollText: ''})
   }
 
+  /**
+  * When the plus button on the voting menu is selected, the emoji picker should
+  * toggle either active or inactive.
+  */
   togglePicker = () => {
     this.setState((state, props) => {
       return {pickerVisible: !state.pickerVisible};
