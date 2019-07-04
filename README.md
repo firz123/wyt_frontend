@@ -42,7 +42,7 @@ Profile Screen:
 
 ## What's left?
 The main things left to do are as follows:
-* When tapping an explore poll, another screen should come up with a graph of user votes and comments
+* When tapping an explore poll, another screen should come up with a graph of user votes and comments (react-svg-charts is part of this project but not currently utilized)
 * Tapping on an image in a poll should enlarge it in a lightbox
 * All redux calls should be changed to API calls by formatting them so that the Axios middleware will make the request
 
