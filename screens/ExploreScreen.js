@@ -4,11 +4,16 @@ import { StyleSheet,
          ScrollView,} from 'react-native';
 import { QuestionPost } from '../components/QuestionPost';
 import { connect } from 'react-redux';
+import { votePoll } from '../actions/actions';
 
 class ExploreScreen extends React.Component {
   static navigationOptions = {
     title: 'Explore',
   };
+
+  voteCallback = (pollID, preview, option, inc_dec) => {
+    this.props.votePoll(this.props.activity.voterID, pollID, preview, option, inc_dec)
+  }
 
   makeQuestionPolls(pollArr) {
     const pollFeed = pollArr.map((poll) =>
@@ -18,7 +23,11 @@ class ExploreScreen extends React.Component {
         content={poll.content}
         img={poll.img}
         uri={poll.uri ? poll.uri : null}
+        profileImg={poll.profileImg}
         votingOpts={poll.votingOpts}
+        votingResults={poll.votingResults}
+        voteCallback={this.voteCallback}
+        pollID={poll.pollID}
         key={poll.pollID} />
     )
     return (
@@ -42,8 +51,14 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = (state) => {
+  const { activity } = state
   const { polls } = state
-  return { polls }
+  return { activity, polls }
 };
 
-export default connect(mapStateToProps)(ExploreScreen);
+const mapDispatchToProps = dispatch => ({
+  votePoll: (voterID, globalPollID, preview, voteOption, inc_dec) =>
+            dispatch(votePoll(voterID, globalPollID, preview, voteOption, inc_dec))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ExploreScreen);

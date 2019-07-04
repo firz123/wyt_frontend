@@ -20,10 +20,11 @@ class ProfileScreen extends React.Component {
       <ActivityFeedItem
         username={activityItem.username}
         action={act.action}
-        poll={act.poll}
+        poll={act.preview}
         voteOption={act.voteOption ? act.voteOption : null}
         profileImg={activityItem.uri}
-        key={act.pollID}
+        active={act.active}
+        key={act.activityID}
       />
     )
     return activityFeed;

@@ -19,6 +19,7 @@ class NotificationsScreen extends React.Component {
           poll={notif.preview}
           voteOption={notif.voteOption ? notif.voteOption : null}
           profileImg={notif.uri}
+          active={true}
           key={notif.pollID}
           />
       )

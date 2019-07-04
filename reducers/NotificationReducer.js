@@ -1,16 +1,16 @@
 const INITIAL_STATE = {
   activityList: [
     {
-      username: 'Sherlock',
-      uri: 'https://octodex.github.com/images/pusheencat.png',
+      username: 'Sample Friend',
+      uri: 'https:\/\/randomuser.me\/api\/portraits\/women\/44.jpg',
       pollID: 0,
       action: 'VOTE',
       voteOption: '👍',
       preview: 'How does this outfit look on me?',
     },
     {
-      username: 'Sherlock',
-      uri: 'https://octodex.github.com/images/pusheencat.png',
+      username: 'Sample Friend',
+      uri: 'https:\/\/randomuser.me\/api\/portraits\/women\/44.jpg',
       pollID: 1,
       action: 'POST',
       preview: 'Del Taco has great fries.'

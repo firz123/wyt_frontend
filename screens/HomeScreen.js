@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import EmojiSelector, { Categories }  from 'react-native-emoji-selector';
+import { addPoll } from '../actions/actions';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -71,6 +72,22 @@ class HomeScreen extends React.Component {
     }
   }
 
+  verifyAndDispatch = () => {
+    if (this.state.selectedVoteOpts.length == 0 &&
+        this.state.pollText.length == 0) {
+          return;
+    }
+    this.props.addPoll(
+      this.props.activity.username,
+      this.props.activity.tag,
+      this.state.pollText,
+      this.state.selectedVoteOpts,
+      this.props.activity.uri);
+    this.setState({pickerVisible: false,
+                  selectedVoteOpts: [],
+                  pollText: ''})
+  }
+
   togglePicker = () => {
     this.setState((state, props) => {
       return {pickerVisible: !state.pickerVisible};
@@ -105,8 +122,9 @@ class HomeScreen extends React.Component {
             multiline={true}
             maxLength={300}
             onChangeText={(text) => this.setState({pollText: text})}
-            numberOfLines = {6}>
-            </TextInput>
+            value={this.state.pollText}
+            numberOfLines = {6}
+            />
             <View style={styles.row}>
               <View style={styles.rightAlign}>
                 <Text style={styles.greyText}>{`${300 - this.state.pollText.length} characters left`}</Text>
@@ -137,7 +155,7 @@ class HomeScreen extends React.Component {
 
           <View style={styles.row}>
             <View style={styles.rightAlign}>
-              <TouchableOpacity style={styles.postButton}>
+              <TouchableOpacity style={styles.postButton}  onPress={this.verifyAndDispatch}>
                   <Text style={styles.postButtonText}>Post</Text>
               </TouchableOpacity>
             </View>
@@ -272,4 +290,9 @@ const mapStateToProps = (state) => {
   return { activity, polls }
 };
 
-export default connect(mapStateToProps)(HomeScreen);
+const mapDispatchToProps = dispatch => ({
+  addPoll: (username, tag, content, votingOpts, profileImg) =>
+            dispatch(addPoll(username, tag, content, votingOpts, profileImg))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

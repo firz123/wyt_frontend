@@ -97,15 +97,18 @@ const styles = StyleSheet.create({
   },
   profImgContainer: {
     alignItems: 'flex-start',
-    marginTop: 10,
+    marginTop: 5,
     marginBottom: 15,
     paddingLeft: 20,
     paddingRight: 20,
     flexDirection: 'row',
+    marginRight: 5,
   },
   usernameTagContainer: {
     alignItems: 'flex-start',
     flexDirection: 'column',
+    marginTop: 5,
+    marginLeft: 5,
   },
   profileImage: {
     width: 50,

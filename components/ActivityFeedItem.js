@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     borderRadius:15,
     resizeMode: 'contain',
     marginTop: 3,
+    marginRight: 5,
   },
   usernameHighlight: {
     fontWeight: 'bold',
