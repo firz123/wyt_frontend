@@ -8,6 +8,9 @@ import { Text } from 'react-native';
 
 export class ActivityFeedItem extends React.Component {
   render() {
+    if (!this.props.active) {
+      return null;
+    }
     return (
     <View style={styles.mainContainer}>
       <View style={styles.imageTagContainer}>

@@ -6,12 +6,49 @@ import { View,
        } from 'react-native';
 import { Text } from 'react-native';
 
+class ToggleButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {selected: false}
+  }
+
+  toggleButton = () => {
+    this.props.toggleCallback(this.props.option, this.state.selected ? -1 : 1);
+    this.setState((state, props) => {
+      return {
+        selected: !state.selected,
+      }
+    });
+  }
+
+  render() {
+    return (
+      <TouchableHighlight
+        style={this.state.selected ? styles.emojiContainerHighlighted : styles.emojiContainer}
+        onPress={this.toggleButton}
+        underlayColor={'#de6df2'}>
+      <View>
+        <Text style={this.state.selected ? styles.emojiOptionHighlighted : styles.emojiOption}>
+          {`${this.props.quantity} ${this.props.option}`}
+        </Text>
+      </View>
+      </TouchableHighlight>);
+  }
+}
+
 export class QuestionPost extends React.Component {
-  makeVoteOption(optionArr) {
+  voted = (option, inc_dec) => {
+    this.props.voteCallback(this.props.pollID, this.props.content, option, inc_dec)
+  }
+
+  makeVoteOption(optionArr, quantityArr) {
     const voteEmojis = optionArr.map((option, index) =>
-        <TouchableHighlight key={index}>
-            <Text style={styles.emojiOption}>{option}</Text>
-        </TouchableHighlight>
+        <ToggleButton
+            key={index}
+            option={option}
+            quantity={quantityArr[index]}
+            toggleCallback={this.voted}
+            />
     )
     return (
       <View style={styles.votingOptions}>
@@ -19,12 +56,13 @@ export class QuestionPost extends React.Component {
       </View>
     );
   }
+
   render() {
     return (
     <View style={styles.mainContainer}>
       <View style={styles.profImgContainer}>
         <Image
-          source={require('../assets/images/robot-dev.png') }
+          source={{uri: this.props.profileImg}}
           style={styles.profileImage}
         />
         <View style={styles.usernameTagContainer}>
@@ -39,7 +77,7 @@ export class QuestionPost extends React.Component {
           <Image source={{uri: this.props.uri}}
           style={styles.postImage}/> : <View></View>
         }
-        {this.makeVoteOption(this.props.votingOpts)}
+        {this.makeVoteOption(this.props.votingOpts, this.props.votingResults)}
       </View>
     </View> );
   }
@@ -90,15 +128,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   emojiOption: {
+    color: '#de6df2',
+    textAlign: 'center',
+  },
+  emojiOptionHighlighted: {
+    color: '#fff',
+    textAlign: 'center',
+  },
+  emojiContainer: {
     height: 30,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 5,
+    paddingRight: 5,
     paddingTop: 5,
     marginRight: 5,
-    textAlign: 'center',
-    borderWidth: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
     borderColor: '#ccced1',
+    borderWidth: 1,
     borderRadius: 12,
+    backgroundColor: '#fff',
+  },
+  emojiContainerHighlighted: {
+    height: 30,
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingTop: 5,
+    marginRight: 5,
+    flexDirection: 'column',
+    alignItems: 'center',
+    borderColor: '#de6df2',
+    borderWidth: 1,
+    borderRadius: 12,
+    backgroundColor: '#de6df2',
   },
   tagStyle: {
     color: "#999",
